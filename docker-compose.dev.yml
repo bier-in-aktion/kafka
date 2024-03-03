@@ -1,0 +1,23 @@
+version: '3.8'
+
+include:
+  - docker-compose.yml
+
+services:
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+      KAFKA_CLUSTERS_0_NAME: test
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:19092
+    networks:
+      - backend
+    extra_hosts:
+      - host.docker.internal:host-gateway
