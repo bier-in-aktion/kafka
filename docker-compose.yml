@@ -1,4 +1,4 @@
-version: '3.8'
+name: 'bier-in-aktion'
 
 x-kafaka_template: &kafka_template
   image: apache/kafka:3.7.0
@@ -27,6 +27,7 @@ volumes:
   kafka-1-data:
   kafka-2-data:
   kafka-3-data:
+  web-db-data:
 
 services:
   init-kafka:
@@ -91,3 +92,15 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
     networks:
       - backend
+
+  web-db:
+    image: postgres:15
+    hostname: web-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: 'bia'
+      POSTGRES_PASSWORD: 'bia'
+      POSTGRES_DB: 'bia'
+    volumes:
+      - web-db-data:/var/lib/postgresql/data
